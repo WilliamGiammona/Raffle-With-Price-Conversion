@@ -14,7 +14,7 @@ git clone https://github.com/WilliamGiammona/FundMe-Contract.git
 yarn
 ```
 
-Next you will need the following:
+Next You Will Need The Following:
 
 A .env file with: 
 * MAINNET_RPC_URL= your personal mainnet RPC_URL (you can get this from https://www.infura.io/)
