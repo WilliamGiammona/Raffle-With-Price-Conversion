@@ -1,3 +1,12 @@
+# TOC
+
+* [What is it for?](#what-is-it-for)
+* [Getting Started](#getting-started)
+      * [Installation](#installation)
+      * [What you'll find](#what-youll-find)
+      * [Testing](#testing)
+      * [Deployment](#deployment)
+
 # What is it for?
 
 This project implements a smart contract on an EVM compatible blockchain for crowdfunding. The owner of the contract can set the minimum funding amount, see who has funded the contract, how much was funded, and is the only one who can withdraw the funds to an address of his/her choice. 
