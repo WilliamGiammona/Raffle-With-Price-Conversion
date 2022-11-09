@@ -3,7 +3,7 @@ import { DeployFunction } from "hardhat-deploy/types";
 import { networkConfig } from "../helper-hardhat-config";
 import verify from "../utils/verify";
 
-const deployFundMe: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
+const deployMyContract: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     const { deployments, getNamedAccounts, network } = hre;
     const { deploy } = deployments;
     const { deployer } = await getNamedAccounts();
