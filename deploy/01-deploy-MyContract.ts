@@ -15,13 +15,13 @@ const deployMyContract: DeployFunction = async function (hre: HardhatRuntimeEnvi
 
     const MyContract = await deploy("My Contract", {
         from: deployer,
-        args: [args],
+        args: args,
         log: true,
         autoMine: true,
         waitConfirmations: networkConfig[chainId].blockConfirmations || 1,
     });
 
-    console.log("MyContract me deployed!!!");
+    console.log("MyContract deployed!!!");
     console.log("----------------------------------------------------");
 
     if (chainId !== 31337 && process.env.ETHERSCAN_API_KEY) {

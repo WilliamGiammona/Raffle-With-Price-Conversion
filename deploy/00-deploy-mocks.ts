@@ -15,7 +15,7 @@ const deployMock: DeployFunction = async function (hre: HardhatRuntimeEnvironmen
 
         const MockContract = await deploy("MyContract", {
             from: deployer,
-            args: [args],
+            args: args,
             log: true,
             autoMine: true,
             waitConfirmations: networkConfig[network.name].blockConfirmations || 1,
