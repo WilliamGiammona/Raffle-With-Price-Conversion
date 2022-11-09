@@ -25,8 +25,8 @@ const deployMyContract: DeployFunction = async function (hre: HardhatRuntimeEnvi
     console.log("----------------------------------------------------");
 
     if (chainId !== 31337 && process.env.ETHERSCAN_API_KEY) {
-        await verify(fundMe.address, [args]);
+        await verify(MyContract.address, args);
     }
 };
-export default deployFundMe;
-deployFundMe.tags = ["all", "MyContract"];
+export default deployMyContract;
+deployMyContract.tags = ["all", "MyContract"];
