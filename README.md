@@ -2,10 +2,10 @@
 
 * [What is it for?](#what-is-it-for)
 * [Getting Started](#getting-started)
-      * [Installation](#installation)
-      * [What you'll find](#what-youll-find)
-      * [Testing](#testing)
-      * [Deployment](#deployment)
+* [Installation](#installation)
+* [What you'll find](#what-youll-find)
+* [Testing](#testing)
+* [Deployment](#deployment)
 
 # What is it for?
 
