@@ -1,5 +1,7 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { assert, expect } from "chai";
+import { BigNumber } from "ethers";
+import { isAddress } from "ethers/lib/utils";
 import { network, deployments, ethers } from "hardhat";
 import { networkConfig } from "../../helper-hardhat-config";
 import { MockV3Aggregator, Raffle, VRFCoordinatorV2Mock } from "../../typechain-types";
@@ -12,7 +14,7 @@ network.config.chainId !== 31337
           let VRFCoordinatorV2Mock: VRFCoordinatorV2Mock;
           let deployer: SignerWithAddress;
           let player1: SignerWithAddress;
-          const VAL = ethers.utils.parseEther(".025");
+          const VAL = ethers.utils.parseEther(".25");
           const chainId = network.config.chainId!;
 
           beforeEach(async function () {
@@ -187,6 +189,7 @@ network.config.chainId !== 31337
                       bool = true;
                   }
                   assert.equal(bool, true);
+                  ``;
               });
 
               it("Emits RequestSent", async function () {
@@ -194,6 +197,187 @@ network.config.chainId !== 31337
                   await network.provider.send("evm_increaseTime", [Number(networkConfig[chainId]["timeInterval"]) + 1]);
                   await network.provider.send("evm_mine", []);
                   await expect(Raffle.requestRandomWords()).to.emit(Raffle, "RequestSent");
+              });
+          });
+          describe("fulfillRandomWords", function () {
+              beforeEach(async function () {
+                  const test = await Raffle.enterRaffle({ value: VAL });
+                  await network.provider.send("evm_increaseTime", [Number(networkConfig[chainId]["timeInterval"]) + 1]);
+                  await network.provider.send("evm_mine");
+              });
+
+              it("Reverts w/ wrong requestId", async function () {
+                  await expect(VRFCoordinatorV2Mock.fulfillRandomWords(0, Raffle.address)).to.be.revertedWith(
+                      "nonexistent request"
+                  );
+              });
+
+              it("Sets the RequestStatus fulfilled property to True", async function () {
+                  await new Promise(async (resolve, reject) => {
+                      Raffle.once("RequestFulfilled", async () => {
+                          try {
+                              const txResponse = await Raffle.getRequestStatus(await Raffle.getLastRequestId());
+                              assert.equal(txResponse[0], true);
+                              resolve("done");
+                          } catch (error) {
+                              reject(error);
+                          }
+                      });
+
+                      const txResponse = await Raffle.requestRandomWords();
+                      await VRFCoordinatorV2Mock.fulfillRandomWords(await Raffle.getLastRequestId(), Raffle.address);
+                  });
+              });
+
+              it("Gives RequestStatus a random number", async function () {
+                  await new Promise(async (resolve, reject) => {
+                      Raffle.once("RequestFulfilled", async () => {
+                          try {
+                              let randNumExists: boolean;
+                              const txResponse = await Raffle.getRequestStatus(await Raffle.getLastRequestId());
+                              if (txResponse[1].toString() > "0") {
+                                  randNumExists = true;
+                              } else {
+                                  randNumExists = false;
+                              }
+                              assert.equal(randNumExists, true);
+                              resolve("done");
+                          } catch (error) {
+                              reject(error);
+                          }
+                      });
+
+                      const txResponse = await Raffle.requestRandomWords();
+                      await VRFCoordinatorV2Mock.fulfillRandomWords(await Raffle.getLastRequestId(), Raffle.address);
+                  });
+              });
+
+              it("Sets a winner", async function () {
+                  const accounts = await ethers.getSigners();
+
+                  for (let index = 1; index < accounts.length; index++) {
+                      let participant = accounts[index];
+                      Raffle = await Raffle.connect(participant);
+                      await Raffle.enterRaffle({ value: VAL });
+                  }
+                  Raffle = await Raffle.connect(deployer);
+
+                  await new Promise(async (resolve, reject) => {
+                      Raffle.once("RequestFulfilled", async () => {
+                          try {
+                              let winnerExists: boolean;
+                              if (
+                                  (await (await Raffle.getWinner()).toString()) !=
+                                  "0x0000000000000000000000000000000000000000"
+                              ) {
+                                  winnerExists = true;
+                              } else {
+                                  winnerExists = false;
+                              }
+                              assert.equal(winnerExists, true);
+                              resolve("done");
+                          } catch (error) {
+                              reject(error);
+                          }
+                      });
+
+                      const txResponse = await Raffle.requestRandomWords();
+                      await VRFCoordinatorV2Mock.fulfillRandomWords(await Raffle.getLastRequestId(), Raffle.address);
+                  });
+              });
+
+              it("Opens the Raffle State", async function () {
+                  const accounts = await ethers.getSigners();
+
+                  for (let index = 1; index < accounts.length; index++) {
+                      let participant = accounts[index];
+                      Raffle = await Raffle.connect(participant);
+                      await Raffle.enterRaffle({ value: VAL });
+                  }
+                  Raffle = await Raffle.connect(deployer);
+
+                  await new Promise(async (resolve, reject) => {
+                      Raffle.once("RequestFulfilled", async () => {
+                          try {
+                              assert.equal((await Raffle.getRaffleState()).toString(), "0");
+                              resolve("done");
+                          } catch (error) {
+                              reject(error);
+                          }
+                      });
+
+                      const txResponse = await Raffle.requestRandomWords();
+                      assert.equal((await Raffle.getRaffleState()).toString(), "1");
+                      await VRFCoordinatorV2Mock.fulfillRandomWords(await Raffle.getLastRequestId(), Raffle.address);
+                  });
+              });
+
+              it("Resets the participants array", async function () {
+                  await new Promise(async (resolve, reject) => {
+                      Raffle.once("RequestFulfilled", async () => {
+                          try {
+                              await expect(Raffle.getParticipants(0)).to.be.revertedWithPanic(50);
+                              resolve("done");
+                          } catch (error) {
+                              reject(error);
+                          }
+                      });
+
+                      const txResponse = await Raffle.requestRandomWords();
+                      await VRFCoordinatorV2Mock.fulfillRandomWords(await Raffle.getLastRequestId(), Raffle.address);
+                  });
+              });
+
+              it("Resets the timeStamp", async function () {
+                  const oldTimeStamp = await Raffle.getTimeStamp();
+                  await new Promise(async (resolve, reject) => {
+                      Raffle.once("RequestFulfilled", async () => {
+                          try {
+                              let timeStampReset: boolean;
+                              oldTimeStamp < (await Raffle.getTimeStamp())
+                                  ? (timeStampReset = true)
+                                  : (timeStampReset = false);
+                              assert.equal(timeStampReset, true);
+
+                              resolve("done");
+                          } catch (error) {
+                              reject(error);
+                          }
+                      });
+
+                      const txResponse = await Raffle.requestRandomWords();
+                      await VRFCoordinatorV2Mock.fulfillRandomWords(await Raffle.getLastRequestId(), Raffle.address);
+                  });
+              });
+
+              it("Pays the winner", async function () {
+                  const accounts = await ethers.getSigners();
+
+                  for (let index = 1; index < accounts.length; index++) {
+                      let participant = accounts[index];
+                      Raffle = await Raffle.connect(participant);
+                      let participantTxResponse = await Raffle.enterRaffle({ value: VAL });
+                  }
+                  const winnerStartingBalance = await ethers.provider.getBalance(player1.address);
+
+                  Raffle = await Raffle.connect(deployer);
+
+                  await new Promise(async (resolve, reject) => {
+                      Raffle.once("RequestFulfilled", async () => {
+                          try {
+                              const winnerEndingBalance = await player1.getBalance();
+                              const adjustment = winnerStartingBalance.add(VAL.mul(20));
+                              assert.equal(adjustment.toString(), winnerEndingBalance.toString());
+
+                              resolve("done");
+                          } catch (error) {
+                              reject(error);
+                          }
+                      });
+
+                      await Raffle.requestRandomWords();
+                      await VRFCoordinatorV2Mock.fulfillRandomWords(await Raffle.getLastRequestId(), Raffle.address);
+                  });
               });
           });
       });
