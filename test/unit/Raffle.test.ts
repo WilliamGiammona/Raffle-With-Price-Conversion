@@ -213,12 +213,12 @@ network.config.chainId !== 31337
               });
 
               it("Sets the RequestStatus fulfilled property to True", async function () {
-                  await new Promise(async (resolve, reject) => {
+                  await new Promise<void>(async (resolve, reject) => {
                       Raffle.once("RequestFulfilled", async () => {
                           try {
                               const txResponse = await Raffle.getRequestStatus(await Raffle.getLastRequestId());
                               assert.equal(txResponse[0], true);
-                              resolve("done");
+                              resolve();
                           } catch (error) {
                               reject(error);
                           }
@@ -230,7 +230,7 @@ network.config.chainId !== 31337
               });
 
               it("Gives RequestStatus a random number", async function () {
-                  await new Promise(async (resolve, reject) => {
+                  await new Promise<void>(async (resolve, reject) => {
                       Raffle.once("RequestFulfilled", async () => {
                           try {
                               let randNumExists: boolean;
@@ -241,7 +241,7 @@ network.config.chainId !== 31337
                                   randNumExists = false;
                               }
                               assert.equal(randNumExists, true);
-                              resolve("done");
+                              resolve();
                           } catch (error) {
                               reject(error);
                           }
@@ -262,7 +262,7 @@ network.config.chainId !== 31337
                   }
                   Raffle = await Raffle.connect(deployer);
 
-                  await new Promise(async (resolve, reject) => {
+                  await new Promise<void>(async (resolve, reject) => {
                       Raffle.once("RequestFulfilled", async () => {
                           try {
                               let winnerExists: boolean;
@@ -275,7 +275,7 @@ network.config.chainId !== 31337
                                   winnerExists = false;
                               }
                               assert.equal(winnerExists, true);
-                              resolve("done");
+                              resolve();
                           } catch (error) {
                               reject(error);
                           }
@@ -296,11 +296,11 @@ network.config.chainId !== 31337
                   }
                   Raffle = await Raffle.connect(deployer);
 
-                  await new Promise(async (resolve, reject) => {
+                  await new Promise<void>(async (resolve, reject) => {
                       Raffle.once("RequestFulfilled", async () => {
                           try {
                               assert.equal((await Raffle.getRaffleState()).toString(), "0");
-                              resolve("done");
+                              resolve();
                           } catch (error) {
                               reject(error);
                           }
@@ -313,11 +313,11 @@ network.config.chainId !== 31337
               });
 
               it("Resets the participants array", async function () {
-                  await new Promise(async (resolve, reject) => {
+                  await new Promise<void>(async (resolve, reject) => {
                       Raffle.once("RequestFulfilled", async () => {
                           try {
                               await expect(Raffle.getParticipants(0)).to.be.revertedWithPanic(50);
-                              resolve("done");
+                              resolve();
                           } catch (error) {
                               reject(error);
                           }
@@ -330,7 +330,7 @@ network.config.chainId !== 31337
 
               it("Resets the timeStamp", async function () {
                   const oldTimeStamp = await Raffle.getTimeStamp();
-                  await new Promise(async (resolve, reject) => {
+                  await new Promise<void>(async (resolve, reject) => {
                       Raffle.once("RequestFulfilled", async () => {
                           try {
                               let timeStampReset: boolean;
@@ -339,7 +339,7 @@ network.config.chainId !== 31337
                                   : (timeStampReset = false);
                               assert.equal(timeStampReset, true);
 
-                              resolve("done");
+                              resolve();
                           } catch (error) {
                               reject(error);
                           }
@@ -362,14 +362,14 @@ network.config.chainId !== 31337
 
                   Raffle = await Raffle.connect(deployer);
 
-                  await new Promise(async (resolve, reject) => {
+                  await new Promise<void>(async (resolve, reject) => {
                       Raffle.once("RequestFulfilled", async () => {
                           try {
                               const winnerEndingBalance = await player1.getBalance();
                               const adjustment = winnerStartingBalance.add(VAL.mul(20));
                               assert.equal(adjustment.toString(), winnerEndingBalance.toString());
 
-                              resolve("done");
+                              resolve();
                           } catch (error) {
                               reject(error);
                           }
