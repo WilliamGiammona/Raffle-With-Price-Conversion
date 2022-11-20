@@ -6,9 +6,9 @@ PLEASE CHECK ALL RELEVANT LAWS AND LEGAL REQUIREMENTS BEFORE DEPLOYING TO MAINNE
 * [What is it for?](#what-is-it-for)
 * [Getting Started](#getting-started)
       * [Installation](#installation)
-      * [What you'll find](#what-youll-find)
-      * [Deployment](#deployment)
-      * [Testing](#testing)
+* [What you'll find](#what-youll-find)
+* [Deployment](#deployment)
+* [Testing](#testing)
 
 # What is it for?
 
@@ -37,7 +37,7 @@ A .env file with:
 - ETHERSCAN_API_KEY= your etherscan api key (you can get this from https://etherscan.io/)
 - COINMARKETCAP_API_KEY= your coinmarket api key (you can get this from https://coinmarketcap.com/)
 
-### What you'll find
+# What you'll find
 
 The main folders are:
 
@@ -48,7 +48,7 @@ The main folders are:
 - typechain-types - sets the types of the contracts
 - gas-report.txt (comes after running hh test) - shows the gas and gas price associated with the contract deployment and functions
 
-### Deployment
+# Deployment
 
 To deploy the Smart Contract, you'll first need to make sure your default network is correctly set. Go to the hardhat.config.ts file and add the network you want to deploy to ("mainnet" if you want to upload it to the ethereum mainnet). To add an additional network, you must add it in the networks object, and add the appropriate RPC URL in your .env file.
 
@@ -60,7 +60,7 @@ Finally, go to the terminal and type:
 hh deploy
 ```
 
-### Testing
+# Testing
 
 To run tests, you'll first need to make sure your default network is correctly set. Go to the hardhat.config.ts file and add "hardhat" (it should already be set to this) if you want to test locally, "goerli" or "sepolia" if you want to test on a test network, or "mainnet" if you want to upload it to the ethereum main net. To add an additional network, you must add it in the networks object, and add the appropriate RPC URL in your .env file.
 
