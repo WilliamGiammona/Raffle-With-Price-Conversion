@@ -1,7 +1,3 @@
-# Raffle
-
-PLEASE CHECK ALL RELEVANT LAWS AND LEGAL REQUIREMENTS BEFORE DEPLOYING TO MAINNET
-
 * [Raffle](#raffle)
 * [What is it for?](#what-is-it-for)
 * [Getting Started](#getting-started)
@@ -9,6 +5,10 @@ PLEASE CHECK ALL RELEVANT LAWS AND LEGAL REQUIREMENTS BEFORE DEPLOYING TO MAINNE
 * [What you'll find](#what-youll-find)
 * [Deployment](#deployment)
 * [Testing](#testing)
+
+# Raffle
+
+PLEASE CHECK ALL RELEVANT LAWS AND LEGAL REQUIREMENTS BEFORE DEPLOYING TO MAINNET
 
 # What is it for?
 
