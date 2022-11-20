@@ -2,6 +2,16 @@
 
 PLEASE CHECK ALL RELEVANT LAWS AND LEGAL REQUIREMENTS BEFORE DEPLOYING TO MAINNET
 
+# Toc
+
+* [Raffle](#raffle)
+* [What is it for?](#what-is-it-for)
+* [Getting Started](#getting-started)
+      * [Installation](#installation)
+      * [What you'll find](#what-youll-find)
+      * [Deployment](#deployment)
+      * [Testing](#testing)
+
 # What is it for?
 
 This project creates a trustless, untamperable, decentralized Raffle smart contract on an EVM compatible blockchain. Anyone can enter the raffle as long as they pay the minimum entry fee. The owner of the contract sets the minimum funding amount in dollars (It's converted to ETH using the PriceConverter.sol file and gets the current ETH to USD price using the price feed contract provided by chainlink). Only the owner can, after certain paramaters are met (listed in the requestRandomWords() function of the Raffle contract), end the raffle, whereby a random number from a chainlink VRF contract (off chain) is given to select the winner (who receives the entire treasury).
