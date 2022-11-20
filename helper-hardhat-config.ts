@@ -24,6 +24,7 @@ export const networkConfig: networkConfigInfo = {
         keyHash: "0x79d3d8832d904592c0bf9818b621522c988bb8b0c05cdc3b15aea1b6e8db0c15",
         requestConfirmations: 6,
         callbackGasLimit: 500000,
+        // Price Feed Address, Coordinator Address, and subscriptionId not needed
     },
 
     1: {
@@ -46,7 +47,7 @@ export const networkConfig: networkConfigInfo = {
         ethPriceFeedAddress: "0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e",
         coordinatorAddress: "0x2Ca8E0C643bDe4C2E08ab1fA0da3401AdAD7734D",
         keyHash: "0x79d3d8832d904592c0bf9818b621522c988bb8b0c05cdc3b15aea1b6e8db0c15",
-        subscriptionId: 6426,
+        subscriptionId: 6426, //Add your subscription Id here
         requestConfirmations: 6,
         callbackGasLimit: 500000,
     },
