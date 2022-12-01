@@ -6,7 +6,7 @@
 * [Deployment](#deployment)
 * [Testing](#testing)
 
-# Raffle
+# Raffle-With-Price-Conversion
 
 PLEASE CHECK ALL RELEVANT LAWS AND LEGAL REQUIREMENTS BEFORE DEPLOYING TO MAINNET
 
