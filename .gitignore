@@ -4,7 +4,9 @@ coverage
 coverage.json
 typechain
 typechain-types
-
+.prettierignore
+.prettierrc
+yarn.lock
 
 #Hardhat files
 cache
